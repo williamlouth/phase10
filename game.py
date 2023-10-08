@@ -14,7 +14,10 @@ class Hand:
             self.jokers += 1
     
     def discardCard(self, card):
-        assert self.cards[card] > 0
+        if self.cards[card] <= 0:
+            print(self.cards, card)
+            assert self.cards[card] > 0
+
         self.cards[card] -= 1
 
     def numberCards(self):
@@ -48,7 +51,7 @@ def completeSets(hand, goal):
 
 def completeRuns(hand, goal):
     hands = []
-    for idx in range(0,10-goal.goalLength):
+    for idx in range(0,len(hand.numberCards())-goal.goalLength):
         for runLen in range(goal.goalLength, len(hand.numberCards())+1 - idx):
             for j in range(0,hand.jokers+1):
                 sumVal = np.sum(hand.numberCards()[idx:idx+runLen] > 0)
