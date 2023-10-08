@@ -91,6 +91,10 @@ class TestHandSuite(unittest.TestCase):
         g1 = PhaseGoal(False, 3)
         g2 = PhaseGoal(True, 3)
         self.assertFalse(isWinningHand(h,[g1,g2]))
+    def test_IsNotSetAndRunJoker(self):
+        h = Hand(np.array([0,1,1,1,1,1,1,1,1,1,1,1,0], dtype=int))
+        g1 = PhaseGoal(True, 9)
+        self.assertTrue(isWinningHand(h,[g1]))
 
 if __name__ == '__main__':
     unittest.main()
