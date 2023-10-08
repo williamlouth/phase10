@@ -51,7 +51,7 @@ def completeSets(hand, goal):
 
 def completeRuns(hand, goal):
     hands = []
-    for idx in range(0,len(hand.numberCards())-goal.goalLength):
+    for idx in range(0,len(hand.numberCards())-goal.goalLength + 1):
         for runLen in range(goal.goalLength, len(hand.numberCards())+1 - idx):
             for j in range(0,hand.jokers+1):
                 sumVal = np.sum(hand.numberCards()[idx:idx+runLen] > 0)

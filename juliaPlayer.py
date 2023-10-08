@@ -11,6 +11,9 @@ class JuliaPlayer(Player):
 
     def discard(self, deck, discardPile):
         discard = self.bestNumberToDiscard(deck, self.hand.cards, self.phaseGoals)
+        if (self.hand.cards[discard] <= 0):
+            print("Tried to discard a card that I didn't have")
+            discard = np.nonzero(self.hand.cards)[0][0]
         return discard
     
 
