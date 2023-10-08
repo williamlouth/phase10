@@ -1,6 +1,7 @@
 import numpy as np
 from copy import deepcopy
 from basePlayer import Player
+from game import *
 
 class WillPlayer(Player):
     def __init__(self, name):
@@ -11,36 +12,25 @@ class WillPlayer(Player):
 
 
     def discard(self, discardPile):
-        if(self.phase == 0):
-            return self.discardPhase0()
-
-        numbNumberCards = np.sum(self.hand.cards)-self.hand.jokers
+        remainingHand = self.discardPhase0()
 
         cardValues = np.arange(1,13)
-        discard = np.random.choice(a=cardValues,size=1, p=self.hand.numberCards() / np.sum(self.hand.numberCards()))
+        discard = np.random.choice(a=cardValues,size=1, p=remainingHand.numberCards() / np.sum(remainingHand.numberCards()))
         return discard
 
     def discardPhase0(self):
-        for idx, i in enumerate(self.hand.numberCards()):
-            if i == 4:
-                return idx + 1
+        shrunkHand = deepcopy(self.hand)
+        for goal in self.phaseGoals:
+            if goal.isRun:
+                shrunkenHands = completeRuns(shrunkHand, goal)
+                if(shrunkenHands):
+                    shrunkHand = shrunkenHands[0]
+            else:
+                shrunkenHands = completeSets(shrunkHand, goal)
+                if(shrunkenHands):
+                    shrunkHand = shrunkenHands[0]
 
-        for idx, i in enumerate(self.hand.numberCards()):
-            if i == 1:
-                return idx + 1
+        return shrunkHand
 
-        for idx, i in enumerate(self.hand.numberCards()):
-            if i == 5:
-                return idx + 1
-
-        for idx, i in enumerate(self.hand.numberCards()):
-            if i == 2:
-                return idx + 1
-
-        for idx, i in enumerate(self.hand.numberCards()):
-            if i > 0:
-                return idx + 1
-    
-    
 
 

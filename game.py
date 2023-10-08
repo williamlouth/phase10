@@ -21,16 +21,11 @@ class Hand:
         return self.cards[1:]
 
     def trimHand(self, number, count):
-        assert number > 0
+        assert self.cards[number] >= count
         self.cards[number] -= count
 
-    def trimRun(self, start, end):
-        assert start > 0
-        assert start <= end
-        for i in range(start, end):
-            self.cards[i] -= 1
-
     def trimJokers(self, count):
+        assert self.jokers > 0 or count == 0
         self.jokers -= count
 
 class PhaseGoal:
@@ -59,7 +54,9 @@ def completeRuns(hand, goal):
                 sumVal = np.sum(hand.numberCards()[idx:idx+runLen] > 0)
                 if  sumVal + j >= runLen:
                     shrunkHand = deepcopy(hand)
-                    shrunkHand.trimRun(idx+1, idx+runLen+1)
+                    for trimIdx in range(idx+1, idx+runLen+1):
+                        if shrunkHand.cards[trimIdx] > 0:
+                            shrunkHand.trimHand(trimIdx, 1)
                     shrunkHand.trimJokers(j)
                     hands.append(shrunkHand)
     return hands
