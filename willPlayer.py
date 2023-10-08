@@ -11,7 +11,7 @@ class WillPlayer(Player):
         self.drawCard(deck.draw(discardPile))
 
 
-    def discard(self, discardPile):
+    def discard(self, deck, discardPile):
         remainingHand = self.discardPhase0()
 
         cardValues = np.arange(1,13)

@@ -15,7 +15,7 @@ class Player:
     def draw(self, deck, discardPile):
         raise NotImplementedError("need to decide what to draw")
 
-    def discard(self, discardPile):
+    def discard(self, deck, discardPile):
         raise NotImplementedError("need to decide what to discard")
     
     def playTurn(self, deck, discardPile):
@@ -23,7 +23,7 @@ class Player:
         if(isWinningHand(self.hand, self.phaseGoals)):
             return True
     
-        discard = self.discard(self)
+        discard = self.discard(deck, discardPile)
 
         self.hand.discardCard(discard)
         discardPile.discard(discard)
