@@ -2,7 +2,7 @@
 import unittest
 import numpy as np
 from copy import deepcopy
-from phase import *
+from game import *
 from willPlayer import *
 
 class TestPlayerSuite(unittest.TestCase):
