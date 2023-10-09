@@ -92,6 +92,7 @@ class Deck:
             for dcard in discardPile.stack:
                 self.cards[dcard] += 1
             discardPile.empty()
+            discardPile.discard(self.deck.draw(discardPile))
 
         card = np.random.choice(a=self.cardValues,size=1, p=self.cards / np.sum(self.cards))
         self.cards[card] -= 1
@@ -110,6 +111,9 @@ class DiscardPile:
     def draw(self):
         return self.stack.pop(-1)
     
+    def top(self):
+        return self.stack[-1]
+    
 class Game:
     def __init__(self, players):
         self.players = players
@@ -125,6 +129,8 @@ class Game:
             player.jokers = 0
             for i in range(10):
                 player.drawCard(self.deck.draw(self.discardPile))
+            
+        self.discardPile.discard(self.deck.draw(self.discardPile))
 
         won = False
         while(won == False):

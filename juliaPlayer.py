@@ -7,7 +7,7 @@ class JuliaPlayer(Player):
         super().__init__(name)
 
     def draw(self, deck, discardPile):
-        self.drawCard(deck.draw(discardPile))
+        self.pullACard(deck, discardPile, self.hand.cards, self.phaseGoals)
 
     def discard(self, deck, discardPile):
         discard = self.bestNumberToDiscard(deck, self.hand.cards, self.phaseGoals)
@@ -61,3 +61,24 @@ class JuliaPlayer(Player):
             lastCombinedRows = combinedRows
 
         return np.argmax(lastCombinedRows)
+
+    def pullACard(self, deck, discardPile, hand, goals):
+        # choose last discard if it improves the situation..
+        handCopy = hand.copy()
+        handCopy[0] = 1
+        res = np.array(self.valueHand(deck, handCopy, goals, 0))
+        sorted = res[res[:, 0].argsort()[::-1]]
+        currentBestValue = sorted[0,0]
+
+        handCopy[0] = 1
+        handCopy[discardPile.top()] += 1
+        res = np.array(self.valueHand(deck, handCopy, goals, 0))
+        sorted = res[res[:, 0].argsort()[::-1]]
+        bestValueAfterPickup = sorted[0,0]
+
+        if bestValueAfterPickup > currentBestValue:
+            self.drawCard(discardPile.draw())
+        else:
+            self.drawCard(deck.draw(discardPile))
+        
+        return hand
